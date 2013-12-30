@@ -34,7 +34,7 @@ mainLoop win = do
         keyList <- changes eCharAccum
         eKey <- fromAddHandler $ keyHandler win
         reactimate $ const exitSuccess <$> eMouseButton
-        reactimate $ print <$> eKeyChar
+        reactimate $ (\(_,c) -> if c == 'q' then exitSuccess else print c) <$> eKeyChar
         reactimate $ print <$> keyList
         reactimate $ print <$> eKey
   network <- compile testNetwork
