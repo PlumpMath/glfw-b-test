@@ -31,9 +31,11 @@ mainLoop win = do
         let
             eKeyAccum = accumB [] $ (:) . snd <$> eKeyChar
         keyList <- changes eKeyAccum
+        eKey <- fromAddHandler $ keyHandler win
         reactimate $ const exitSuccess <$> eMouseButton
         reactimate $ print <$> eKeyChar
         reactimate $ print <$> keyList
+        reactimate $ print <$> eKey
   network <- compile testNetwork
   actuate network
   putStrLn "Click the mouse button inside the window to exit!"
@@ -44,7 +46,16 @@ charHandler win callback = do
   GLFW.setCharCallback win . Just $ \w c -> callback (w, c)
   return (GLFW.setCharCallback win Nothing)
 
-         
+keyHandler :: GLFW.Window -> AddHandler ( GLFW.Window
+                                        , GLFW.Key
+                                        , Int
+                                        , GLFW.KeyState
+                                        , GLFW.ModifierKeys)
+
+keyHandler win callback = do
+  GLFW.setKeyCallback win . Just $ \w k num ks mk -> callback (w, k, num, ks, mk)
+  return (GLFW.setKeyCallback win Nothing)
+
 mouseButtonHandler :: GLFW.Window -> AddHandler ( GLFW.Window
                                                 , GLFW.MouseButton
                                                 , GLFW.MouseButtonState
