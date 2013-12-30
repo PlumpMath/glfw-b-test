@@ -1,9 +1,10 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Main where
 import           Control.Lens
-import qualified Graphics.Rendering.OpenGL as GL
-import qualified Graphics.UI.GLFW          as GLFW
-import Reactive.Banana.Frameworks
+import           Control.Monad              (when)
+import qualified Graphics.Rendering.OpenGL  as GL
+import qualified Graphics.UI.GLFW           as GLFW
+import           Reactive.Banana.Frameworks
 import           System.IO
 
 main :: IO ()
