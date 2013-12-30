@@ -22,10 +22,10 @@ executable glfw-b-test
   build-depends:       base >=4.6 && <4.7
                       ,GLFW-b >=1.4
                       ,reactive-banana >=0.7
-                      ,lens >=3
+                      ,lens >=3.0
                       ,OpenGL >=2.9
-                      ,repa >3.2
-                      ,repa-devil >0.3
+                      ,repa >=3.2
+                      ,repa-devil >=0.3
   -- hs-source-dirs:
   default-language:    Haskell2010
 
