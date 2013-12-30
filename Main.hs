@@ -5,6 +5,7 @@ import           Control.Applicative
 --import           Control.Lens
 import           Control.Monad              (forever, when)
 --import qualified Graphics.Rendering.OpenGL  as GL
+import           Game.Handlers
 import qualified Graphics.UI.GLFW           as GLFW
 import           Reactive.Banana
 import           Reactive.Banana.Frameworks
@@ -29,8 +30,8 @@ mainLoop win = do
         eKeyChar <- fromAddHandler $ charHandler win
         eMouseButton <- fromAddHandler $ mouseButtonHandler win
         let
-            eKeyAccum = accumB [] $ (:) . snd <$> eKeyChar
-        keyList <- changes eKeyAccum
+            eCharAccum = accumB [] $ (:) . snd <$> eKeyChar
+        keyList <- changes eCharAccum
         eKey <- fromAddHandler $ keyHandler win
         reactimate $ const exitSuccess <$> eMouseButton
         reactimate $ print <$> eKeyChar
@@ -41,25 +42,3 @@ mainLoop win = do
   putStrLn "Click the mouse button inside the window to exit!"
   forever GLFW.waitEvents
 
-charHandler :: GLFW.Window -> AddHandler (GLFW.Window, Char)
-charHandler win callback = do
-  GLFW.setCharCallback win . Just $ \w c -> callback (w, c)
-  return (GLFW.setCharCallback win Nothing)
-
-keyHandler :: GLFW.Window -> AddHandler ( GLFW.Window
-                                        , GLFW.Key
-                                        , Int
-                                        , GLFW.KeyState
-                                        , GLFW.ModifierKeys)
-
-keyHandler win callback = do
-  GLFW.setKeyCallback win . Just $ \w k num ks mk -> callback (w, k, num, ks, mk)
-  return (GLFW.setKeyCallback win Nothing)
-
-mouseButtonHandler :: GLFW.Window -> AddHandler ( GLFW.Window
-                                                , GLFW.MouseButton
-                                                , GLFW.MouseButtonState
-                                                , GLFW.ModifierKeys)
-mouseButtonHandler win callback = do
-  GLFW.setMouseButtonCallback win . Just $ \w b bs mk -> callback (w, b, bs, mk)
-  return (GLFW.setMouseButtonCallback win Nothing)
