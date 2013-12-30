@@ -8,19 +8,18 @@ import           System.IO
 
 main :: IO ()
 main = do
-  GLFW.init
+  initSuccess <- GLFW.init
   GLFW.setTime 0
-  GLFW.createWindow 640 480 "GLFW-b Test" Nothing Nothing
-  return ()
+  window <- GLFW.createWindow 640 480 "GLFW-b Test" Nothing Nothing
 
-{-let networkDescription :: forall t Frameworks t = Moment t ()
-    networkDescription = do
-      -- input : obtain Event from functions that register event
-      -- handlers
-      emouse    <- fromAddHandler $ registerMouseEvent window
-      ekeyboard <- fromAddHandler $ registerKeyEvent window
-      -- input : obtain Behavior from mutable data by polling
-      bdie      <- fromPoll       $ randomRIO (1,6)
+  let testNetwork :: forall t. Frameworks t => Moment t ()
+      testNetwork = do
+         -- input : obtain Event from functions that register event
+         -- handlers
+         emouse    <- fromAddHandler $ setKeyCallback window
+         ekeyboard <- fromAddHandler $ setMouseCallback window
+      reactimate $ fmap print emouse
+      reactimate $ fmap print ekeyboard
 
-      -- express event graph
--}
+  network <- compile testNetwork
+  actuate network
