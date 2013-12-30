@@ -10,13 +10,14 @@ main :: IO ()
 main = do
   initSuccess <- GLFW.init
   GLFW.setTime 0
-  window <- GLFW.createWindow 640 480 "GLFW-b Test" Nothing Nothing
-  let testNetwork = do
-        -- input : obtain Event from functions that register event
-        -- handlers
-        emouse    <- fromAddHandler $ GLFW.setKeyCallback window
-        ekeyboard <- fromAddHandler $ GLFW.setMouseButtonCallback window
-        reactimate $ fmap print emouse
-        reactimate $ fmap print ekeyboard
-  network <- compile testNetwork
-  actuate network
+  when initSuccess $ do
+    window <- GLFW.createWindow 640 480 "GLFW-b Test" Nothing Nothing
+    let testNetwork = do
+          -- input : obtain Event from functions that register event
+          -- handlers
+          emouse    <- fromAddHandler $ GLFW.setKeyCallback window
+          ekeyboard <- fromAddHandler $ GLFW.setMouseButtonCallback window
+          reactimate $ fmap print emouse
+          reactimate $ fmap print ekeyboard
+    network <- compile testNetwork
+    actuate network
