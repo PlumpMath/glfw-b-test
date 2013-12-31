@@ -7,8 +7,9 @@ import           Control.Applicative
 import           Control.Monad
 import qualified Data.ByteString            as BS
 import           Foreign.C.Types
-import           Foreign.Marshal.Array
+import           Foreign.Ptr
 import           Game.Handlers
+import           Graphics.GLUtil
 import           Graphics.Rendering.OpenGL  (($=))
 import qualified Graphics.Rendering.OpenGL  as GL
 import qualified Graphics.UI.GLFW           as GLFW
@@ -52,7 +53,7 @@ mainLoop win = do
             eCharAccum = accumB [] $ (:) . snd <$> eKeyChar
         keyList <- changes eCharAccum
         eKey <- fromAddHandler $ keyHandler win
-        reactimate $ (GL.clearColor $=) <$> eRandomColor
+        --reactimate $ (GL.clearColor $=) <$> eRandomColor
         reactimate $ const exitSuccess <$> eMouseButton
         reactimate $ (\(_,c) -> if c == 'q' then exitSuccess else print c) <$> eKeyChar
         --reactimate $ print <$> keyList
@@ -61,50 +62,24 @@ mainLoop win = do
   actuate network
   GLFW.makeContextCurrent $ Just win
   prog <- initializeOpenGL
-  forever (draw prog >> GLFW.swapBuffers win >> GLFW.waitEvents)
+  forever (draw >> GLFW.swapBuffers win >> GLFW.waitEvents)
 
-makeShader :: BS.ByteString -> GL.ShaderType -> IO GL.Shader
-makeShader txt typ = do
-  shader <- GL.createShader typ
-  GL.shaderSourceBS shader $= txt
-  GL.compileShader shader
-  GL.get GL.shaderCompiler >>= print
-  GL.get (GL.shaderInfoLog shader) >>= print
-  GL.releaseShaderCompiler
-  return shader
-
-makeShaderProgram :: BS.ByteString -> BS.ByteString -> IO GL.Program
-makeShaderProgram ftxt vtxt = do
-  prog <- GL.createProgram
-  frag <- makeShader ftxt GL.FragmentShader
-  vert <- makeShader vtxt GL.VertexShader
-  GL.attachShader prog frag
-  GL.attachShader prog vert
-  GL.linkProgram prog
-  GL.validateProgram prog
-  GL.get (GL.validateStatus prog) >>= print
-  GL.get (GL.programInfoLog prog) >>= print
-  return prog
-
-initializeOpenGL :: IO GL.Program
+initializeOpenGL :: IO ShaderProgram
 initializeOpenGL = do
-  (vtxt:ftxt:_) <- forM ["shaders/Simple.vert", "shaders/Simple.frag"]
-    (getDataFileName >=> BS.readFile)
-  prog <- makeShaderProgram ftxt vtxt
+  (vpath:fpath:_) <- mapM getDataFileName ["shaders/Simple.vert", "shaders/Simple.frag"]
+  prog <- simpleShaderProgram vpath fpath
+  print $ attribs prog
+  buf <- makeBuffer GL.ArrayBuffer triangle
+  enableAttrib prog "attribPosition"
+  setAttrib prog "attribPosition" GL.ToFloat (GL.VertexArrayDescriptor 4 GL.Float 0 nullPtr)
   return prog
-
-draw :: GL.Program -> IO ()
-draw prog = do
-  pos <- GL.get (GL.attribLocation prog "attribPosition")
-  withArray triangle $ \ptr -> let vaDesc = GL.VertexArrayDescriptor 4 GL.Float 0 ptr in do
-    (GL.arrayPointer GL.VertexArray) $= vaDesc
-    GL.vertexAttribPointer pos $= (GL.ToFloat, vaDesc)
-    GL.vertexAttribArray pos $= GL.Enabled
-  GL.clear [GL.ColorBuffer]
-  GL.flush
   where triangle :: [Float]
         triangle  = [ 0.0, 1.0, 0.0, 1.0
                     , 1.0,-1.0, 0.0, 1.0
                     ,-1.0,-1.0, 0.0, 1.0
                     ]
 
+draw :: IO ()
+draw = do
+  GL.drawArrays GL.Triangles 0 3
+  GL.flush
