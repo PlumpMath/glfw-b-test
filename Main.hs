@@ -10,6 +10,7 @@ import           Game.Handlers
 import           Graphics.Rendering.OpenGL  (($=))
 import qualified Graphics.Rendering.OpenGL  as GL
 import qualified Graphics.UI.GLFW           as GLFW
+import           Paths_glfw_b_test
 import           Reactive.Banana
 import           Reactive.Banana.Frameworks
 import           System.Exit                (exitSuccess)
@@ -28,6 +29,7 @@ instance Random MyColor where
 
 main :: IO ()
 main = do
+  getDataFileName "images/DC_PU_Tiles.png" >>= putStrLn
   initSuccess <- GLFW.init
   GLFW.setTime 0
   when initSuccess $ do
