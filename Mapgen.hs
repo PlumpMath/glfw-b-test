@@ -1,0 +1,56 @@
+{-# LANGAUGE Template Haskell #-}
+import           Control.Lens
+import qualified Data.Map      as Map
+import           System.Random
+
+-- The Floor data type will store all tiles on that dungeon floor
+
+data Floor = Floor { _name      :: String
+                   , _floorPlan :: FloorPlan
+                   }
+
+type Xpos = Int
+type Ypos = Int
+type FloorPlan = Map.Map (Xpos, Ypos) Tile
+type Inventory = [Item]
+
+-- TODO: add Tiles having 'creatures', 'traps', etc
+
+data Tile = Tile { _sprite    :: String
+                 , _inventory :: Inventory
+                 }
+
+-- Items should get thier own module
+
+data Item = Item { _letter      :: Char
+                 , _description :: String
+                 }
+
+-- Setup a few tiles to work with
+-- Ideally, '_sprite' would just pick out a sprite
+
+wall = Tile { _sprite = "wall"
+            , _inventory = []
+            }
+
+floor = Tile { _sprite = "floor"
+             , _inventory = []
+             }
+
+tileMapping = Map.Fromlist $ zip [1,2..] tileList
+              where
+                tileList = [wall, floor]
+
+generateRandomRoom xMin xMax yMin yMax = do
+  initialGenerator <- getStdGen
+  xMeasure <- randomR (xMin, xMax) initialGenerator
+  yMeasure <- randomR (yMin, yMax) (snd xMeasure)
+  let
+      generateRow bottom width yVal
+        | yVal == 1 || bottom = replicate width wall
+        | otherwise = wall : (replicate (width - 2) floor) : wall
+      yDim = fst yMeasure
+      xDim = fst xMeasure
+      roomDimensions = (xDim, yDim)
+      theRoomAs2DMatrix = zip [1,2...yDim] $ map (generateRow yDim xDim) [1,2...yDim]
+  return (theRoomAs2DMatrix, roomDimensions)
