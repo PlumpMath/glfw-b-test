@@ -62,6 +62,7 @@ mainLoop win = do
   actuate network
   GLFW.makeContextCurrent $ Just win
   prog <- initializeOpenGL
+  GL.currentProgram $= Just (program prog)
   forever (draw >> GLFW.swapBuffers win >> GLFW.waitEvents)
 
 initializeOpenGL :: IO ShaderProgram
