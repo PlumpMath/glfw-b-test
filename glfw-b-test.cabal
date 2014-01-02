@@ -25,7 +25,7 @@ executable glfw-b-test
   build-depends:
                        base >=4.6 && <4.7
                       ,GLFW-b >=1.4
-                      ,GLUtil >=0.7
+                      --,GLUtil >=0.7
                       ,OpenGL >=2.9
                       ,bytestring >=0.10
                       ,containers >= 0.5
