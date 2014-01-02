@@ -41,7 +41,7 @@ tileMapping = Map.fromList $ zip [1,2..] tileList
               where
                 tileList = [wall, dungeonFloor]
 
-generateRandomRoom :: Int -> Int -> Int -> Int -> IO (a, b)
+generateRandomRoom :: Int -> Int -> Int -> Int -> IO ([(Int, [Tile])], (Int, Int))
 generateRandomRoom xMin xMax yMin yMax = do
   initialGenerator <- getStdGen
   let
@@ -49,7 +49,7 @@ generateRandomRoom xMin xMax yMin yMax = do
       yMeasure = randomR (yMin, yMax) $ snd xMeasure
       generateRow :: Int -> Int -> Int -> [Tile]
       generateRow bottom width yVal
-        | yVal == 1 || bottom = replicate width wall
+        | yVal == 1 || yVal == bottom = replicate width wall
         | otherwise = [wall] ++ (replicate (width - 2) dungeonFloor) ++ [wall]
       yDim = fst yMeasure
       xDim = fst xMeasure
