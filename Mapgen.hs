@@ -1,4 +1,4 @@
-{-# LANGAUGE Template Haskell #-}
+{-# LANGUAGE TemplateHaskell   #-}
 import           Control.Lens
 import qualified Data.Map      as Map
 import           System.Random
@@ -14,7 +14,7 @@ type Ypos = Int
 type FloorPlan = Map.Map (Xpos, Ypos) Tile
 type Inventory = [Item]
 
--- TODO: add Tiles having 'creatures', 'traps', etc
+-- Todo: add Tiles having 'creatures', 'traps', etc
 
 data Tile = Tile { _sprite    :: String
                  , _inventory :: Inventory
@@ -33,24 +33,26 @@ wall = Tile { _sprite = "wall"
             , _inventory = []
             }
 
-floor = Tile { _sprite = "floor"
+dungeonFloor = Tile { _sprite = "floor"
              , _inventory = []
              }
 
-tileMapping = Map.Fromlist $ zip [1,2..] tileList
+tileMapping = Map.fromList $ zip [1,2..] tileList
               where
-                tileList = [wall, floor]
+                tileList = [wall, dungeonFloor]
 
+generateRandomRoom :: Int -> Int -> Int -> Int -> IO (a, b)
 generateRandomRoom xMin xMax yMin yMax = do
   initialGenerator <- getStdGen
-  xMeasure <- randomR (xMin, xMax) initialGenerator
-  yMeasure <- randomR (yMin, yMax) (snd xMeasure)
   let
+      xMeasure = randomR (xMin, xMax) initialGenerator
+      yMeasure = randomR (yMin, yMax) $ snd xMeasure
+      generateRow :: Int -> Int -> Int -> [Tile]
       generateRow bottom width yVal
         | yVal == 1 || bottom = replicate width wall
-        | otherwise = wall : (replicate (width - 2) floor) : wall
+        | otherwise = [wall] ++ (replicate (width - 2) dungeonFloor) ++ [wall]
       yDim = fst yMeasure
       xDim = fst xMeasure
       roomDimensions = (xDim, yDim)
-      theRoomAs2DMatrix = zip [1,2...yDim] $ map (generateRow yDim xDim) [1,2...yDim]
+      theRoomAs2DMatrix = zip [1,2..yDim] $ map (generateRow yDim xDim) [1,2..yDim]
   return (theRoomAs2DMatrix, roomDimensions)
