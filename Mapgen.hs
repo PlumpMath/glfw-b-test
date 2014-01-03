@@ -1,8 +1,8 @@
-{-# LANGUAGE TemplateHaskell   #-}
+{-# LANGUAGE TemplateHaskell #-}
 import           Control.Lens
+import           Creature
 import qualified Data.Map      as Map
 import           System.Random
-import           Creature
 
 -- The Floor data type will store all tiles on that dungeon floor
 
@@ -42,13 +42,16 @@ wall = Tile { _sprite = "wall"
             }
 
 dungeonFloor = Tile { _sprite = "floor"
-             , _inventory = []
-             }
+                    , _inventory = []
+                    }
 
 tileMapping :: Map.Map Int Tile
 tileMapping = Map.fromList $ zip [1,2..] tileList
               where
                 tileList = [wall, dungeonFloor]
+
+-- generates a rectangular room given max and min X and Y dimentions
+-- TODO: modify to allow custom default floor and wall sprites
 
 generateRandomRoom :: Int -> Int -> Int -> Int -> IO ([(Int, [Tile])], (Int, Int))
 generateRandomRoom xMin xMax yMin yMax = do
