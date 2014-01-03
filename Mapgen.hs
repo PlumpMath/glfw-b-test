@@ -29,6 +29,7 @@ data Item = Item { _letter      :: Char
 -- Setup a few tiles to work with
 -- Ideally, '_sprite' would just pick out a sprite
 
+wall, dungeonFloor :: Tile
 wall = Tile { _sprite = "wall"
             , _inventory = []
             }
@@ -37,6 +38,7 @@ dungeonFloor = Tile { _sprite = "floor"
              , _inventory = []
              }
 
+tileMapping :: Map.Map Int Tile
 tileMapping = Map.fromList $ zip [1,2..] tileList
               where
                 tileList = [wall, dungeonFloor]
