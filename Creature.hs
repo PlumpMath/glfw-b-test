@@ -2,19 +2,20 @@
 module Creature where
 import           Control.Lens
 import qualified Data.Map     as Map
+import           Item
 
 -- Used to segregate creatures
 data CreatureGenus = Human | Orc | Goblin | Troll | Elf | Dragon | Kobold
 -- the 'IsType' is a tuple of genus, genus description, and sprites
-type CreatureIsType = (CreatureGenus, String, [String]) 
-    
+type CreatureIsType = (CreatureGenus, String, [String])
+
 -- obviously incomplete Creature type, with lens support
 
-data Creature = Creature { _called             :: String
-                         , _sprite             :: String
-                         , _inventory          :: [Item]
-                         , _health             :: (Int,Int)
-                         , _specialDescriptor  :: String
+data Creature = Creature { _called            :: String
+                         , _sprite            :: String
+                         , _inventory         :: [Item]
+                         , _health            :: (Int,Int)
+                         , _specialDescriptor :: String
                          }
               deriving (Read, Eq)
 
@@ -24,8 +25,7 @@ $(makeLenses ''Creature)
 -- the Item type
 
 instance Show Creature where
-    show (Creature name sprite inventory health) = name ++ '\n' ++
-                                                   "spritepath: " ++ sprite ++ '\n' ++
-                                                   "health: " ++ (fst health) ++ "/" ++ (snd health)
+    show (Creature n s i h sd) = sd ++ n ++ "\n" ++
+                                 "spritepath: " ++ s ++ "\n" ++
+                                 "health: " ++ (show $ fst h) ++ "/" ++ (show $ snd h)
 
--- allow some random variatio

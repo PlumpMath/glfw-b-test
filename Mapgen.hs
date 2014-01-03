@@ -27,9 +27,6 @@ data Tile = Tile { _sprite    :: String
                  , _creature  :: Creature
                  }
 
--- Items should get thier own module
-
-
 -- Setup a few tiles to work with
 -- Ideally, '_sprite' would just pick out a sprite
 
