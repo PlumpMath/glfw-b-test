@@ -10,4 +10,8 @@ data Item = Item { _letter      :: Char
           deriving (Read, Eq)
 
 instance Show Item where
-    
+    show (Item letter description) = letter : " - " ++ description
+
+                                     
+
+                                     
