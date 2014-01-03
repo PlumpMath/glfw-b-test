@@ -2,6 +2,7 @@
 import           Control.Lens
 import qualified Data.Map      as Map
 import           System.Random
+import           Creature
 
 -- The Floor data type will store all tiles on that dungeon floor
 
@@ -14,10 +15,16 @@ type Ypos = Int
 type FloorPlan = Map.Map (Xpos, Ypos) Tile
 type Inventory = [Item]
 
--- Todo: add Tiles having 'creatures', 'traps', etc
+-- RoomStyles will be used (eventually) to define aspects of room
+-- layout, as well as creatures and items inside
+
+data RoomStyle = Arboretum | CouncilRoom | Crucible | Dining | Dormitory | Jail | Kitchen | Smithy | Storage | Temple | Tomb | TortureChamber
+
+-- TODO: add Tiles having 'creatures', 'traps', etc
 
 data Tile = Tile { _sprite    :: String
                  , _inventory :: Inventory
+                 , _creature  :: Creature
                  }
 
 -- Items should get thier own module
