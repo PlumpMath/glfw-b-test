@@ -29,9 +29,6 @@ data Tile = Tile { _sprite    :: String
 
 -- Items should get thier own module
 
-data Item = Item { _letter      :: Char
-                 , _description :: String
-                 }
 
 -- Setup a few tiles to work with
 -- Ideally, '_sprite' would just pick out a sprite
