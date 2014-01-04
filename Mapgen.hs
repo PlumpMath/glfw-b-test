@@ -6,7 +6,7 @@ import           System.Random
 
 -- The Floor data type will store all tiles on that dungeon floor
 
-data Floor = Floor { _name      :: String
+data Floor = Floor { _floorName      :: String
                    , _floorPlan :: FloorPlan
                    }
 
@@ -22,8 +22,8 @@ data RoomStyle = Arboretum | CouncilRoom | Crucible | Dining | Dormitory | Jail 
 
 -- TODO: add Tiles having 'creatures', 'traps', etc
 
-data Tile = Tile { _sprite    :: String
-                 , _inventory :: Inventory
+data Tile = Tile { _tileSprite    :: String
+                 , _onTheGround :: Inventory
                  , _creature  :: Creature
                  }
 
@@ -31,12 +31,12 @@ data Tile = Tile { _sprite    :: String
 -- Ideally, '_sprite' would just pick out a sprite
 
 wall, dungeonFloor :: Tile
-wall = Tile { _sprite = "wall"
-            , _inventory = []
+wall = Tile { _tileSprite = "wall"
+            , _onTheGround = []
             }
 
-dungeonFloor = Tile { _sprite = "floor"
-                    , _inventory = []
+dungeonFloor = Tile { _tileSprite = "floor"
+                    , _onTheGround = []
                     }
 
 tileMapping :: Map.Map Int Tile
