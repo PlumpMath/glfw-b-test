@@ -11,7 +11,10 @@ data CreatureGenus = Human | Orc | Goblin | Troll | Elf | Dragon | Kobold
 
 -- the 'IsType' is a tuple of genus, genus description, and sprites
 
-type CreatureClassification = (CreatureGenus, String, [String])
+data CreatureClassification = CreatureClassification { _genus :: CreatureGenus
+                              , _description                  :: String
+                              , _spriteList                   :: [String]
+                              }
 
 
 -- obviously incomplete Creature type, with lens support
@@ -91,32 +94,39 @@ human = (Human,
          "Typically between 1.3 and 2 meters in height, and 50 and 120 kilograms, these creatures utilize tools, instruments of warfare, knowledge of the arcane, and cunning to make their way in the world.",
          [])
 
-orc :: CreatureClassification
-orc = (Orc,
-       "With heights between 1.7 and 2.2 meters, often weighing 75 to 130 kilograms, orcs are known to be brutish and unyielding. Though they lack much knowledge of magic, they are avid tool users, and the smarter of their kind can be sneaky and deceitful when needed.",
-       [])
+orc, goblin, troll, elf, dragon, kobold :: CreatureClassification
+orc = CreatureClassification g d sl
+      where
+        g = Orc
+        d =  "With heights between 1.7 and 2.2 meters, often weighing 75 to 130 kilograms, orcs are known to be brutish and unyielding. Though they lack much knowledge of magic, they are avid tool users, and the smarter of their kind can be sneaky and deceitful when needed."
+        sl = []
 
-goblin :: CreatureClassification
-goblin = (Goblin,
-          "Smaller creatures, goblins range from 1.1 to 1.7 meters tall and weight between 40 and 75 kilograms. They are often silent in their movement, though their frame doesn't allow them to use heavier arms. They are often comparatively dull-witted, but agile and deft with rudimentary traps.",
-          [])
+goblin = CreatureClassification g d sl
+         where
+           g = Goblin
+           d = "Smaller creatures, goblins range from 1.1 to 1.7 meters tall and weight between 40 and 75 kilograms. They are often silent in their movement, though their frame doesn't allow them to use heavier arms. They are often comparatively dull-witted, but agile and deft with rudimentary traps."
+           sl = []
 
-troll :: CreatureClassification
-troll = (Troll,
-         "As the largest of the humanoids, trolls tend to stand 2.8 to 3.5 meters tall and weigh 190 to 260 kilograms. Their brawn has supplanted their mental agility, but they are often zealotous followers of a shamanistic occult. They can wield some basic magic, but tend to rely on brute strength to solve problems.",
-         [])
+troll = CreatureClassification g d sl
+        where
+          g = Troll
+          d = "As the largest of the humanoids, trolls tend to stand 2.8 to 3.5 meters tall and weigh 190 to 260 kilograms. Their brawn has supplanted their mental agility, but they are often zealotous followers of a shamanistic occult. They can wield some basic magic, but tend to rely on brute strength to solve problems."
+          sl = []
 
-elf :: CreatureClassification
-elf = (Elf,
-       "Slender and tall, elves stand roughly 1.5 to 2.2 meters tall and weigh between 50 and 75 kilograms. Creatures of enlightened ways, elves have great knowledge of the arcane, but neglect the use of tools or heavy arms."
-       [])
+elf = CreatureClassification g d sl
+      where
+        g = Elf
+        d = "Slender and tall, elves stand roughly 1.5 to 2.2 meters tall and weigh between 50 and 75 kilograms. Creatures of enlightened ways, elves have great knowledge of the arcane, but neglect the use of tools or heavy arms."
+        sl = []
 
-dragon :: CreatureClassification
-dragon = (Dragon,
-          "Gigantic lizard-like beasts. Speculated to range from 10 to 30 meters in length and weigh thousands of kilograms, these are not to be trifled with. As ancient creatures, dragons tend to be wise and knowledgeable, although some may have hiddem themselves from the world too long to be aware of its modern state.",
-          [])
+dragon = CreatureClassification g d sl
+         where
+           g = Dragon
+           d = "Gigantic lizard-like beasts. Speculated to range from 10 to 30 meters in length and weigh thousands of kilograms, these are not to be trifled with. As ancient creatures, dragons tend to be wise and knowledgeable, although some may have hiddem themselves from the world too long to be aware of its modern state."
+           sl = []
 
-kobold :: CreatureClassification
-          (Kobold,
-           "Kobolds are small, dog-like humanoids measuring 0.8 to 1.2 meters tall and weighing 20 to 40 kilograms. They have know knowledge of the arcane, and only rudimentary knowledge of tools, weapons, and aromr. They survive mostly by skulking, scavenging, and posing little threat.",
-           [])
+kobold = CreatureClassification g d sl
+         where
+           g = Kobold
+           d = "Kobolds are small, dog-like humanoids measuring 0.8 to 1.2 meters tall and weighing 20 to 40 kilograms. They have know knowledge of the arcane, and only rudimentary knowledge of tools, weapons, and aromr. They survive mostly by skulking, scavenging, and posing little threat."
+           sl = []
