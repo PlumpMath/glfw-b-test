@@ -25,3 +25,5 @@ data ItemSlot = ItemSlot { _stackSize  :: Int
 
 $(makeLenses ''Item)
 $(makeLenses ''ItemSlot)
+
+type Inventory = [Item]

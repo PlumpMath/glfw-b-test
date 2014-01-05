@@ -3,17 +3,20 @@ import           Control.Lens
 import           Creature
 import qualified Data.Map      as Map
 import           System.Random
+import System.FilePath
+import System.Directory
+import Data.Maybe (fromJust)
+import Item
 
 -- The Floor data type will store all tiles on that dungeon floor
 
-data Floor = Floor { _floorName      :: String
+data Floor = Floor { _floorName :: String
                    , _floorPlan :: FloorPlan
                    }
 
 type Xpos = Int
 type Ypos = Int
 type FloorPlan = Map.Map (Xpos, Ypos) Tile
-type Inventory = [Item]
 
 -- RoomStyles will be used (eventually) to define aspects of room
 -- layout, as well as creatures and items inside
@@ -22,14 +25,36 @@ data RoomStyle = Arboretum | CouncilRoom | Crucible | Dining | Dormitory | Jail 
 
 -- TODO: add Tiles having 'creatures', 'traps', etc
 
-data Tile = Tile { _tileSprite    :: String
+data Tile = Tile { _tileSprite  :: String
                  , _onTheGround :: Inventory
-                 , _creature  :: Creature
+                 , _creature    :: Creature
                  }
 
+data Room = Room { _roomStyle :: RoomStyle
+                 , _xPos      :: Int
+                 , _yPos      :: Int
+                 , _layout    :: Layout
+                 , _size      :: Int
+                 }
+
+type Layout = Map.Map (Int,Int) Tile
+
+readLayoutFile :: String -> IO FilePath
+readLayoutFile fp = do
+  curDir <- getCurrentDirectory
+  gotFile <- findFile [curDir </> "data" </> "myroomlayouts", curDir </> "data" </> "roomlayouts"] fp
+  case gotFile of
+    Just fullFP -> return fullFP
+    Nothing -> return "Layout file not found!"
+
+-- TODO: Parse the input file and generate the layout below
+    
+--generateLayoutFromFile :: String -> Layout
+--generateLayoutFromFile fp = 
+    
 -- Setup a few tiles to work with
 -- Ideally, '_sprite' would just pick out a sprite
-
+          
 wall, dungeonFloor :: Tile
 wall = Tile { _tileSprite = "wall"
             , _onTheGround = []
