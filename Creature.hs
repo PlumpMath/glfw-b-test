@@ -1,21 +1,26 @@
 {-# LANGUAGE TemplateHaskell #-}
 module Creature where
 import           Control.Lens
-import           Data.List    (intersprse, (\\))
+import           Data.List    (intersperse, (\\))
 import qualified Data.Map     as Map
 import           Item
 
 -- Used to segregate creatures
 
 data CreatureGenus = Human | Orc | Goblin | Troll | Elf | Dragon | Kobold
+                   deriving (Show, Eq)
 
--- the 'IsType' is a tuple of genus, genus description, and sprites
+-- the CreatureClassification provides species information + a sprite list
 
-data CreatureClassification = CreatureClassification { _genus :: CreatureGenus
-                              , _description                  :: String
-                              , _spriteList                   :: [String]
-                              }
+data CreatureClassification = CreatureClassification { _genus       :: CreatureGenus
+                                                     , _description :: String
+                                                     , _spriteList  :: [String]
+                                                     }
 
+instance Show CreatureClassification where
+    show (CreatureClassification g d _) = unlines ["A " ++ show g
+                                                  , d
+                                                  ]
 
 -- obviously incomplete Creature type, with lens support
 
@@ -27,17 +32,18 @@ data Creature = Creature { _called             :: String
                          , _specialDescriptor  :: String
                          , _specialDescription :: String
                          }
-              deriving (Read, Eq)
 
 $(makeLenses ''Creature)
+$(makeLenses ''CreatureClassification)
 
 -- skipped showing inventory for now since I need to write a show for
 -- the Item type
 
 instance Show Creature where
-    show (Creature n s i h sd) = sd ++ n ++ "\n" ++
-                                 "spritepath: " ++ s ++ "\n" ++
-                                 "health: " ++ show (fst h) ++ "/" ++ show (snd h)
+    show (Creature n _ s _ h sd sdd) = sd ++ n ++ "\n" ++
+                                       "spritepath: " ++ s ++ "\n" ++
+                                       "health: " ++ show (fst h) ++ "/" ++ show (snd h) ++ "\n" ++
+                                       sdd
 
 -- inventory management functions
 
@@ -89,12 +95,13 @@ transferItem giver taker itemSlot = if haveItem giver itemSlot
 
 -- Creature types and descriptions
 
-human :: CreatureClassification
-human = (Human,
-         "Typically between 1.3 and 2 meters in height, and 50 and 120 kilograms, these creatures utilize tools, instruments of warfare, knowledge of the arcane, and cunning to make their way in the world.",
-         [])
+human, orc, goblin, troll, elf, dragon, kobold :: CreatureClassification
+human = CreatureClassification g d sl
+        where
+          g = Human
+          d = "Typically between 1.3 and 2 meters in height, and 50 and 120 kilograms, these creatures utilize tools, instruments of warfare, knowledge of the arcane, and cunning to make their way in the world."
+          sl = []
 
-orc, goblin, troll, elf, dragon, kobold :: CreatureClassification
 orc = CreatureClassification g d sl
       where
         g = Orc

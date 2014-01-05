@@ -13,7 +13,7 @@ data Item = Item { _name        :: String
           deriving (Read, Eq)
 
 instance Show Item where
-    show (Item letter description) = letter : " - " ++ description
+    show (Item name description _ _) = name ++ " - " ++ description
 
 -- Slots are meta-items used to track inventory related stats
                                      
@@ -22,3 +22,6 @@ data ItemSlot = ItemSlot { _stackSize  :: Int
                          , _item       :: Item
                          }
                 deriving (Read, Eq)
+
+$(makeLenses ''Item)
+$(makeLenses ''ItemSlot)

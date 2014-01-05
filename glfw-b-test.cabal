@@ -17,6 +17,7 @@ cabal-version:       >=1.10
 data-files:          images/*.png
                     ,shaders/*.frag
                     ,shaders/*.vert
+                    ,strings/*.txt
 
 executable glfw-b-test
   main-is: Main.hs
