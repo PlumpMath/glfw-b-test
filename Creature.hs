@@ -109,3 +109,14 @@ troll = (Troll,
 elf :: CreatureClassification
 elf = (Elf,
        "Slender and tall, elves stand roughly 1.5 to 2.2 meters tall and weigh between 50 and 75 kilograms. Creatures of enlightened ways, elves have great knowledge of the arcane, but neglect the use of tools or heavy arms."
+       [])
+
+dragon :: CreatureClassification
+dragon = (Dragon,
+          "Gigantic lizard-like beasts. Speculated to range from 10 to 30 meters in length and weigh thousands of kilograms, these are not to be trifled with. As ancient creatures, dragons tend to be wise and knowledgeable, although some may have hiddem themselves from the world too long to be aware of its modern state.",
+          [])
+
+kobold :: CreatureClassification
+          (Kobold,
+           "Kobolds are small, dog-like humanoids measuring 0.8 to 1.2 meters tall and weighing 20 to 40 kilograms. They have know knowledge of the arcane, and only rudimentary knowledge of tools, weapons, and aromr. They survive mostly by skulking, scavenging, and posing little threat.",
+           [])
