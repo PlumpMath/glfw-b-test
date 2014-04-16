@@ -1,6 +1,6 @@
-#version 440
+#version 130
 
-layout(location = 0) in vec4 attribPosition;
+in vec4 attribPosition;
 
 void main () {
   gl_Position = attribPosition;
